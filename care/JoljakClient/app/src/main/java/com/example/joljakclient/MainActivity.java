@@ -1,14 +1,18 @@
 package com.example.joljakclient;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.WindowManager;
 
 public class MainActivity extends AppCompatActivity {
+    Toolbar myToolbar;
     //보호자 어플 마찬가지로 사용자와 똑같이 GPS + 사용자 정보+현재 상태(보행수,심박수) 필요->여기에 대한 뒷받침이 논문필요
     //서버 연결필요
     //유저와 마찮가지로 클라이언트도 유저와 같은 상황이 필요하지만 중간에 서버가 들어감
@@ -18,19 +22,24 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        myToolbar = findViewById(R.id.toolbar_dark);
+        setSupportActionBar(myToolbar);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
         MenuInflater inflater=getMenuInflater();
         inflater.inflate(R.menu.mainmenu,menu);
+
         return true;
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item){
-        Intent intent=null;
+        Intent intent = null;
         switch (item.getItemId()){
             case R.id.GPS:
-                intent=new Intent(MainActivity.this,GPSActivity.class);
+                intent = new Intent(MainActivity.this,GPSActivity.class);
                 startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
