@@ -1,95 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <include
-        android:id="@+id/toolbar_dark"
-        layout="@layout/toolbar"/>
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="24dip"
+        tools:context=".MainActivity" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <LinearLayout
+        android:layout_height="26dip"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal"
+        style="@style/AppTheme.ConnectionInfoContainer" >
+        <ImageView
+            android:id="@+id/status_title"
+            android:layout_width="wrap_content"
+            android:layout_height="20dip"
+            android:layout_margin="3dip"
+            />
+        <TextView
+            android:id="@+id/status_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="아이디"
-                android:textSize="20sp"
-                android:padding="10dp"
-                android:gravity="center_horizontal"
-                android:textColor="@color/text"/>
-            <EditText
-                android:background="@drawable/edittext"
-                android:padding="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:hint="아이디를 입력하세요."
-                android:textSize="20sp"/>
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp"
-            android:layout_marginTop="5dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="비밀번호"
-                android:textSize="20sp"
-                android:padding="10dp"
-                android:gravity="center_horizontal"
-                android:textColor="@color/text"/>
-            <EditText
-                android:background="@drawable/edittext"
-                android:padding="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:hint="비밀번호를 입력하세요."
-                android:textSize="20sp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="50dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textSize="20sp"
-                android:text="로그인"
-                android:layout_weight="1.5"/>
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"/>
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:textSize="20sp"
-                android:text="회원가입"
-                android:layout_weight="1.5"/>
-
-        </LinearLayout>
-
+            android:layout_height="20dip"
+            android:layout_margin="3dip"/>
     </LinearLayout>
-</LinearLayout>
+
+</FrameLayout>

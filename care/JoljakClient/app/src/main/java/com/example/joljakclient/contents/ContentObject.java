@@ -16,6 +16,8 @@
 
 package com.example.joljakclient.contents;
 
+import androidx.constraintlayout.solver.widgets.Analyzer;
+
 import java.util.Arrays;
 import java.util.Calendar;
 
@@ -24,9 +26,9 @@ public class ContentObject {
 
     public static final int DATA_COUNT = 20;
 
-    public int mContentType;			// Content type
-    public int mId;						// ID
-    public long mTimeInMilli;			//
+    public int mContentType;            // Content type
+    public int mId;                        // ID
+    public long mTimeInMilli;            //
     public int mYear;
     public int mMonth;
     public int mDay;
@@ -43,7 +45,7 @@ public class ContentObject {
         mId = id;
         mTimeInMilli = timeInMilli;
 
-        mAccelData = new int[DATA_COUNT*3];		// DATA_COUNT * 3 axis
+        mAccelData = new int[DATA_COUNT * 3];        // DATA_COUNT * 3 axis
         Arrays.fill(mAccelData, 0x00000000);
         mAccelIndex = 0;
         mCacheIndex = 0;
@@ -52,7 +54,7 @@ public class ContentObject {
         Calendar cal = Calendar.getInstance();
         setTime(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH),
                 cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), cal.get(Calendar.SECOND));
-        if(mTimeInMilli < 1)
+        if (mTimeInMilli < 1)
             mTimeInMilli = cal.getTimeInMillis();
     }
 
@@ -65,7 +67,7 @@ public class ContentObject {
         Arrays.fill(mAccelData, 0x00000000);
         mAccelIndex = 0;
         mCacheIndex = 0;
-        setTime(0,0,0,0,0,0);
+        setTime(0, 0, 0, 0, 0, 0);
     }
 
     public void setId(int id) {
@@ -82,23 +84,55 @@ public class ContentObject {
     }
 
     public void setAccelData(int x_axis, int y_axis, int z_axis) {
-        if(mAccelData != null && mAccelIndex > -1 && mAccelIndex < mAccelData.length / 3) {
+        if (mAccelData != null && mAccelIndex > -1 && mAccelIndex < mAccelData.length / 3) {
             mAccelData[mAccelIndex] = x_axis;
-            mAccelData[mAccelIndex+1] = y_axis;
-            mAccelData[mAccelIndex+2] = z_axis;
+            mAccelData[mAccelIndex + 1] = y_axis;
+            mAccelData[mAccelIndex + 2] = z_axis;
             mAccelIndex++;
         }
     }
 
     public void setAccelData(int data) {
-        if(mAccelData != null && mAccelIndex > -1 && mAccelIndex < DATA_COUNT) {
-            mAccelData[mAccelIndex*3 + mCacheIndex] = data;
+        if (mAccelData != null && mAccelIndex > -1 && mAccelIndex < DATA_COUNT) {
+            mAccelData[mAccelIndex * 3 + mCacheIndex] = data;
             mCacheIndex++;
-            if(mCacheIndex == 3) {
+            if (mCacheIndex == 3) {
                 //Logs.d("# Accel = "+mAccelData[mAccelIndex*3 + mCacheIndex - 3]+", "+mAccelData[mAccelIndex*3 + mCacheIndex - 2]+", "+mAccelData[mAccelIndex*3 + mCacheIndex - 1]);
                 mAccelIndex++;
                 mCacheIndex = 0;
             }
         }
+    }
+
+    public synchronized ActivityReport addContentObject(ContentObject co) {
+        if (co == null)
+            return null;
+
+        /*// Caching contents
+        mContentList.add(co);
+
+        // Get current time
+        long currentTime = System.currentTimeMillis();
+        if(mPreviousProcessTime < 1)
+            mPreviousProcessTime = currentTime;
+
+        // Analyze cached contents
+        ActivityReport ar = null;
+        if(currentTime - mPreviousProcessTime > REPORT_INTERVAL) {
+            Logs.d("#");
+            Logs.d("# before analyzer");
+            // Analyze accelerometer value and make report
+            ar = Analyzer.analyzeAccel(mContentList, REPORT_SAMPLING_TIME, REPORT_INTERVAL);
+
+            // Remember activity report
+            if(ar != null) {
+                addActivityReport(ar);
+            }
+            mPreviousProcessTime = currentTime;
+            mContentList.clear();
+        }
+
+        return ar;*/
+        return null;
     }
 }
