@@ -61,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
     //할일을 하지 않았을때 백그라운드에 표시
     //클라이언트한테 전송
     Button emergenctButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,6 +101,54 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
+        /*if(bluetoothAdapter == null) { // 디바이스가 블루투스를 지원하지 않을 때
+            // 여기에 처리 할 코드를 작성하세요.
+        }
+
+        else { // 디바이스가 블루투스를 지원 할 때
+            if(bluetoothAdapter.isEnabled()) { // 블루투스가 활성화 상태 (기기에 블루투스가 켜져있음)
+                selectBluetoothDevice(); // 블루투스 디바이스 선택 함수 호출
+            }
+
+            else { // 블루투스가 비 활성화 상태 (기기에 블루투스가 꺼져있음)
+                // 블루투스를 활성화 하기 위한 다이얼로그 출력
+                Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                // 선택한 값이 onActivityResult 함수에서 콜백된다.
+                startActivityForResult(intent, REQUEST_ENABLE_BT);
+            }
+            BluetoothProfile.ServiceListener mProfileListenr=new BluetoothProfile.ServiceListener() {
+                @Override
+                public void onServiceConnected(int profile, BluetoothProfile proxy) {
+                    if(profile==BluetoothProfile.A2DP){
+                        boolean deviceconnected=false;
+                        BluetoothA2dp btA2dp=(BluetoothA2dp)proxy;
+                        List<BluetoothDevice> a2dpconnected=btA2dp.getConnectedDevices();
+                        if(a2dpconnected.size() !=0){
+                            for(BluetoothDevice device : a2dpconnected){
+                                if(device.getName().contains("AirPods")){
+                                    deviceconnected=true;
+                                    textViewReceive.setText(device.getName());
+
+                                }
+                            }
+                        }
+                        if(!deviceconnected){
+                            textViewReceive.setText("연결안됨");
+                        }
+                        bluetoothAdapter.closeProfileProxy(BluetoothProfile.A2DP,btA2dp);
+                    }
+                }
+
+                @Override
+                public void onServiceDisconnected(int profile) {
+
+                }
+            };
+            Context context=getApplicationContext();
+            bluetoothAdapter.getProfileProxy(context,mProfileListenr,BluetoothProfile.A2DP);
+        }*/
     }
     @Override
     protected void onActivityResult(int requestcode,int resultcode,Intent data){
@@ -174,10 +221,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.simbak:
                 intent=new Intent(MainActivity.this,simbakActivity.class);
-                startActivity(intent);
-                break;
-            case R.id.bluetooth:
-                intent=new Intent(MainActivity.this, BluetoothActivity.class);
                 startActivity(intent);
                 break;
             case R.id.write://디비부분에 저장 희망 이게 제일 중요함 만약 어그러지면 다 망함
