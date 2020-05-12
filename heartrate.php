@@ -3,13 +3,13 @@
 
     mysqli_set_charset($con, "utf8");
     $p_id = $_POST["p_id"];
-    $h_heartrate = $_POST["h_heartrate"];
+    $h_heartrate = $_POST["h_heart"];
 
-    $statement = "UPDATE Patient SET h_heartrate = '$h_heartrate' WHERE p_id = $p_id";
+    $statement = "UPDATE Patient SET h_heartrate = '$h_heart' WHERE p_id = $p_id";
      
     if(mysqli_query($con, $statement)){
-	echo '¾÷·Îµå';
+	echo 'ì—…ë¡œë“œ';
     } else{
-	echo '¾÷·Îµå ½ÇÆÐ';
+	echo 'ì—…ë¡œë“œ ì‹¤íŒ¨';
     }
 ?>
