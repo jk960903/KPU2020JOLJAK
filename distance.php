@@ -4,12 +4,13 @@
     mysqli_set_charset($con, "utf8");
     $p_id = $_POST["p_id"];
     $walk = $_POST["walk"];
+    $datetime = $_POST["datetime"];
 
-    $statement = "INSERT INTO distance (p_id, walk) VALUES ('$p_id', '$walk')";
+    $statement = "INSERT INTO distance (p_id, walk, datetime) VALUES ('$p_id', '$walk', '$datetime')";
      
     if(mysqli_query($con, $statement)){
-	echo 'ÀÔ·Â';
+	echo 'ìž…ë ¥';
     } else{
-	echo 'ÀÔ·Â ½ÇÆÐ';
+	echo 'ìž…ë ¥ ì‹¤íŒ¨';
     }
 ?>
