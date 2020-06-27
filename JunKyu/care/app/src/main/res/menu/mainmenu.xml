@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/simbak"
+        android:title="심박"/>
+    <item
+        android:id="@+id/GPS"
+        android:title="위치"/>
+    <item
+        android:id="@+id/Condition"
+        android:title="건강상태"/>
+    <item
+        android:id="@+id/write"
+        android:title="정보 입력"/>
+    <item
+        android:id="@+id/goAccount"
+        android:title="회원가입"/>
+    <item
+        android:id="@+id/drugpage"
+        android:title="얄 설정"/>
+    <item
+        android:id="@+id/loginActivity"
+        android:title="로그인"/>
+    <item
+        android:id="@+id/drugmenu"
+        android:title="약목록"/>
+</menu>

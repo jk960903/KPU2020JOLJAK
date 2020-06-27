@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">JoljakClient</string>
+    <string name="title_activity_login">로그인</string>
+
+    <!--  Bluetooth -->
+    <string name="bt_title">Bluetooth</string>
+    <string name="bt_state_init">initializing</string>
+    <string name="bt_state_wait">waiting.. (select a device manually)</string>
+    <string name="bt_state_connect">connecting</string>
+    <string name="bt_state_connected">connected</string>
+    <string name="bt_state_error">error</string>
+    <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Set the bluetooth enable at phone settings.</string>
+    <string name="bt_cmd_sending_error">Transaction failed</string>
+
+    <!--  DeviceListActivity -->
+    <string name="scanning">장치를 스캔 중입니다...</string>
+    <string name="select_device">연결할 장치를 선택하세요.</string>
+    <string name="none_paired">No devices have been paired</string>
+    <string name="none_found">No devices found</string>
+    <string name="title_paired_devices">Paired Devices</string>
+    <string name="title_other_devices">Other Available Devices</string>
+    <string name="button_scan">Scan for devices</string>
+</resources>

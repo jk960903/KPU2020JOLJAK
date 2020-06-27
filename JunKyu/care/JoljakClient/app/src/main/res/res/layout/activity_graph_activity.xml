@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".graph_activity"
+    android:orientation="vertical">
+    <GridLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="10dp"
+        android:rowCount="1"
+        android:columnCount="3" >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:padding="5dp"
+            android:background="@color/colorButton"
+            android:text="연도 별 정렬"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center"
+            android:id="@+id/order_month"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:padding="5dp"
+            android:background="@color/colorButton"
+            android:text="월별 정렬"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:id="@+id/order_day"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:textColor="#ffffff"
+            android:background="@color/colorButton"
+            android:text="일별 정렬"
+            android:padding="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/order_hour"
+            />
+    </GridLayout>
+    <org.eazegraph.lib.charts.BarChart
+        android:layout_height="500dp"
+        android:layout_width="match_parent"
+        android:id="@+id/graph" />
+</LinearLayout>

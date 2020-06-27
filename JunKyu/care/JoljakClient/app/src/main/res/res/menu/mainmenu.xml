@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/GPS"
+        android:title="위치"/>
+    <item
+        android:id="@+id/Graph"
+        android:title="통계"/>
+</menu>
