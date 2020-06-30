@@ -50,6 +50,7 @@ import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.maps.model.LatLng;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -94,6 +95,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     final static int ACT_DRUG = 3;
     final static int ACT_DRUGMENU = 4;
     String sfName = "myFile";
+    private String mJsonString;
     //할일을 하지 않았을때 백그라운드에 표시
     //클라이언트한테 전송
 
@@ -113,9 +115,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
 
-    static ArrayList<Integer> drughourList;
-    static ArrayList<Integer> drugminutesList;
-    ArrayList<String> drugnameList;
+    private static ArrayList<MedicineData> mlist;
 
     // URL 설정.
     static String url = "http://192.168.63.221/PHP_connection.php";
@@ -177,9 +177,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
             }
         });
-        drughourList = new ArrayList<>();
-        drugnameList = new ArrayList<>();
-        drugminutesList=new ArrayList<>();
+        mlist=new ArrayList<>();
         ID = (TextView) findViewById(R.id.mainUser);
         UserAddress = (TextView) findViewById(R.id.mainAddress);
         CareId = findViewById(R.id.MainCare);
@@ -278,12 +276,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     }
                 }
             case ACT_DRUG:
-                int hour = data.getIntExtra("drugtime", 0);
-                int minute = data.getIntExtra("drugmin",0);
-                String s = data.getStringExtra("drugname");
-                drughourList.add(hour);
-                drugminutesList.add(minute);
-                drugnameList.add(s);
                 break;
             case ACT_LOGIN:
                 p_id = data.getStringExtra("p_id");
@@ -331,7 +323,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         SharedPreferences sf = getSharedPreferences(sfName, 0);
         SharedPreferences.Editor editor = sf.edit();
         editor.putInt("Walk", walkCount);
-        editor.putInt("ListSize", drughourList.size());
         if (user != null) {
             editor.putString("ID", user.name);
             editor.putString("USERADDRESS", user.Address);
@@ -388,8 +379,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 break;*/
             case R.id.drugmenu:
                 intent = new Intent(MainActivity.this, DrugMenu.class);
-                intent.putIntegerArrayListExtra("druglist", drughourList);
-                intent.putStringArrayListExtra("drugnamelist", drugnameList);
                 startActivity(intent);
                 break;
         }
@@ -549,17 +538,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         @Override
         public void run() {
-
+            getDrug getDrug=new getDrug();
+            getDrug.execute("80");
             while (true) {
                 Calendar calendar = Calendar.getInstance();
                 int hour = calendar.get(Calendar.HOUR_OF_DAY);
                 int min = calendar.get(Calendar.MINUTE);
-                int second = calendar.get(Calendar.SECOND);
-
-//                String s = drugList.get(0).toString();
-                    bt.send("a", true);
-                    Log.e("bluetooth","check");
-
+                for(int i=0; i<mlist.size(); i++){
+                    if(mlist.get(i).getm_time().equals(Integer.toString(hour)+":"+Integer.toString(min))){
+                        bt.send("a",true);
+                    }
+                }
                 //HeartSend();센서 고장으로 오류
                 try {
                     Thread.sleep(5000);
@@ -632,6 +621,112 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
             //doInBackground()로 부터 리턴된 값이 onPostExecute()의 매개변수로 넘어오므로 s를 출력한다.
             //tv_outPut.setText(s);
+        }
+    }
+
+    private class getDrug extends AsyncTask<String,Void,String> {
+        String serverURL = "http://192.168.0.60/query_medicine.php";
+        @Override
+        protected String doInBackground(String... strings) {
+            String postParameters = "locate=" + strings[0];
+            try {
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+
+                httpURLConnection.setReadTimeout(10000);
+                httpURLConnection.setConnectTimeout(10000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setRequestProperty("Accept-charset", "UTF-8");
+                httpURLConnection.setRequestProperty("Context_type", "application/x-www-form-urlencoded;charset=UTF-8");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d("tag", "response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if (responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                } else {
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    sb.append(line);
+                }
+
+
+                bufferedReader.close();
+
+
+                return sb.toString().trim();
+
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+                return null;
+            }
+
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            mJsonString = s;
+            showResult();
+        }
+
+        private void showResult() {
+            String TAG_JSON = "root";
+            String TAG_NAME = "p_name";
+            String TAG_MEDICINE = "m_name";
+            String TAG_TIME="m_time";
+            try {
+                JSONObject jsonObject = new JSONObject(mJsonString.substring(mJsonString.indexOf("{"), mJsonString.lastIndexOf("}") + 1));
+                JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+
+                    JSONObject item = jsonArray.getJSONObject(i);
+
+                    String id = item.getString(TAG_NAME);
+                    String m_name = item.getString(TAG_MEDICINE);
+                    String m_time = item.getString(TAG_TIME);
+
+                    MedicineData medicineData = new MedicineData();
+
+                    medicineData.setID(id);
+                    medicineData.setm_name(m_name);
+                    medicineData.setm_time(m_time);
+
+                    mlist.add(medicineData);
+
+                }
+
+
+            } catch (JSONException e) {
+
+                e.printStackTrace();
+            }
+
+
         }
     }
 }
