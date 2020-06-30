@@ -213,7 +213,6 @@ public class GPSService extends Service implements LocationListener ,SensorEvent
             if(calendar.get(Calendar.MONTH)<=10){
                  day = Integer.toString(calendar.get(Calendar.YEAR))  +"0"+ Integer.toString(calendar.get(Calendar.MONTH))
                         + Integer.toString(calendar.get(Calendar.DATE)) +  Integer.toString(calendar.get(Calendar.HOUR_OF_DAY));
-                 Log.e("dayofmonth",day);
             }
             Response.Listener<String> responseListener = new Response.Listener<String>() {
                 @Override
@@ -222,22 +221,12 @@ public class GPSService extends Service implements LocationListener ,SensorEvent
                         System.out.println(response);
                         JSONObject jsonResponse = new JSONObject(response);
                         boolean success = jsonResponse.getBoolean("success");
-
-                        if (success) {//제이슨 받아올수 있으면
-                            //String WalkView = jsonResponse.getString("walkView");
-                            //day = jsonResponse.getString("day");
-                        } else {
-                            //받아올수 없으면
-                            Log.i("fail", "failjson");
-
-                        }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
             };
             WalkRequest walkRequest = new WalkRequest("이준규", walkcount, day, responseListener);
-            Log.e("걸음 보내짐","걸음보내짐");
             RequestQueue queue = Volley.newRequestQueue(GPSService.this);
             queue.add(walkRequest);
         }
@@ -250,13 +239,6 @@ public class GPSService extends Service implements LocationListener ,SensorEvent
                public void onResponse(String response) {
                    try{
                        JSONObject jsonResponse=new JSONObject(response);
-                       boolean success=jsonResponse.getBoolean("success");
-                       if(success){
-
-                       }
-                       else{
-
-                       }
                    }catch(JSONException e){
                        e.printStackTrace();
                    }

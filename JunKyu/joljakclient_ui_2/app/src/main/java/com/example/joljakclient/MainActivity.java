@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override
         protected String doInBackground(String... params){
-            String serverURL="http://192.168.62.94/query.php";//이부분을 쿼리문으로 바꿔주고 제이슨으로 받아오되 다르게 받아와야함
+            String serverURL="http://192.168.0.60/query.php";//이부분을 쿼리문으로 바꿔주고 제이슨으로 받아오되 다르게 받아와야함
             String postParameters="walk="+params[1];
             try {
 
@@ -313,7 +313,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private class LocateNet extends AsyncTask<String,Void,String> {
-        String serverURL = "http://192.168.62.94/query_locate.php";
+        String serverURL = "http://192.168.0.60/query_locate.php";
 
 
         @Override
@@ -425,6 +425,113 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private class HeartLate extends AsyncTask<String,Void,String>{
+        String serverURL = "http://192.168.0.60/query_locate.php";
+
+
+        @Override
+        protected String doInBackground(String... strings) {
+            String postParameters = "locate=" + strings[0];
+            try {
+
+                URL url = new URL(serverURL);
+                HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+
+                httpURLConnection.setReadTimeout(10000);
+                httpURLConnection.setConnectTimeout(10000);
+                httpURLConnection.setRequestMethod("POST");
+                httpURLConnection.setRequestProperty("Accept-charset", "UTF-8");
+                httpURLConnection.setRequestProperty("Context_type", "application/x-www-form-urlencoded;charset=UTF-8");
+                httpURLConnection.setDoInput(true);
+                httpURLConnection.connect();
+
+
+                OutputStream outputStream = httpURLConnection.getOutputStream();
+                outputStream.write(postParameters.getBytes("UTF-8"));
+                outputStream.flush();
+                outputStream.close();
+
+
+                int responseStatusCode = httpURLConnection.getResponseCode();
+                Log.d("tag", "response code - " + responseStatusCode);
+
+                InputStream inputStream;
+                if (responseStatusCode == HttpURLConnection.HTTP_OK) {
+                    inputStream = httpURLConnection.getInputStream();
+                } else {
+                    inputStream = httpURLConnection.getErrorStream();
+                }
+
+
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, "UTF-8");
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    sb.append(line);
+                }
+
+
+                bufferedReader.close();
+
+
+                return sb.toString().trim();
+
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+                return null;
+            }
+
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            mJsonString[2] = s;
+            showResult();
+        }
+
+        private void showResult() {
+            String TAG_JSON = "root";
+            String TAG_ID = "p_id";
+            String TAG_LOCATE = "locate";
+            String TAG_DAY = "datetime";
+            try {
+                JSONObject jsonObject = new JSONObject(mJsonString[2].substring(mJsonString[2].indexOf("{"), mJsonString[2].lastIndexOf("}") + 1));
+                JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+
+                    JSONObject item = jsonArray.getJSONObject(i);
+
+                    String id = item.getString(TAG_ID);
+                    String locate = item.getString(TAG_LOCATE);
+                    String day = item.getString(TAG_DAY);
+
+                    LocationData locationData = new LocationData();
+
+                    locationData.setID(id);
+
+                    List_Locate.add(locationData);
+                }
+
+
+            } catch (JSONException e) {
+
+                Log.d("Error", "showResult : ", e);
+                e.printStackTrace();
+            }
+
+
+        }
+    }
+
+    private class getData extends AsyncTask<String,Void,String>{
         String serverURL = "http://192.168.62.102/query_locate.php";
 
 

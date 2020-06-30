@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class LocationRequest extends StringRequest {
-    final static private String URL = "http://192.168.62.94/location.php";
+    final static private String URL = "http://192.168.0.60/location.php";
     private Map<String, String> parameters;
     //생성자
     public LocationRequest(String p_id, double longitued,double latitude, Response.Listener<String> listener) {

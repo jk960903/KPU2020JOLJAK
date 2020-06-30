@@ -10,14 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WalkRequest extends StringRequest {
-    final static private String URL = "http://192.168.62.94/walk.php";//주소가 들어가야함
+    final static private String URL = "http://192.168.0.60/walk.php";//주소가 들어가야함
     private Map<String,String> parameter;
     public WalkRequest(String p_id,int walkcount,String day, Response.Listener<String> listener){
         super(Method.POST,URL,listener,null);
         parameter=new HashMap<>();
         parameter.put("p_id",p_id);
         String walk=Integer.toString(walkcount);
-        Log.e("walkcountrequest",Integer.toString(walkcount));
         parameter.put("walk",walk);
         parameter.put("datetime",day);
 

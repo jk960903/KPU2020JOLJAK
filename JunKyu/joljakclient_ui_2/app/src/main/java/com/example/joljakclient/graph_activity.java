@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import org.eazegraph.lib.charts.BarChart;
 import org.eazegraph.lib.models.BarModel;
@@ -23,6 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Random;
 
 public class graph_activity extends AppCompatActivity {
 
@@ -36,6 +38,7 @@ public class graph_activity extends AppCompatActivity {
     public static String[] mJsonString;
     Button[] buttons;
     public static String ls;
+    private TextView averageText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,12 +50,16 @@ public class graph_activity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 makeBartoMonth(graph_barChart);
+                int temp=getAverage(0);
+                averageText.setText("이번달은 지난 평균보다 "+Integer.toString(temp)+"만큼 적습니다");
             }
         });
         buttons[1].setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 makeBartoDay(graph_barChart);
+                int temp=getAverage(1);
+                averageText.setText("오늘은 이번달 평균보다 "+Integer.toString(temp)+"만큼 적습니다.");
             }
         });
         buttons[2].setOnClickListener(new View.OnClickListener() {
@@ -65,6 +72,7 @@ public class graph_activity extends AppCompatActivity {
     private void network(){
         getWalk networkTask=new getWalk();
         networkTask.onPostExecute(ls);
+     //   statisticWalk();
     }
     private void initData(){
         List_Walk=new ArrayList<>();
@@ -77,6 +85,7 @@ public class graph_activity extends AppCompatActivity {
         buttons[0]=(Button)findViewById(R.id.order_month);
         buttons[1]=(Button)findViewById(R.id.order_day);
         buttons[2]=(Button)findViewById(R.id.order_hour);
+        averageText=(TextView)findViewById(R.id.average);
         Intent intent=getIntent();
         ls=intent.getStringExtra("json");
     }
@@ -101,11 +110,11 @@ public class graph_activity extends AppCompatActivity {
         String[] orderday;
         orderday=new String[31];
         int day_count=0;
-        for(int i=0; i<31; i++){
+        for(int i=0; i<day; i++){
             orderday[i]=Integer.toString(i+1);
-            day_count=0;
-            for(int j=0; j<24; j++){
-                day_count+=Walkstaistic[month-1][i][j];
+            day_count=Walkstaistic[month][i][23];
+            if(day==i-1&&hour<=23){
+                day_count=Walkstaistic[month][day-1][hour-1];
             }
             barChart.addBar(new BarModel(orderday[i],day_count,0xFF56B7F1));
         }
@@ -117,48 +126,76 @@ public class graph_activity extends AppCompatActivity {
         String[] orderMonth;
         orderMonth=new String[12];
         int month_count=0;
-        for(int i=0; i<12; i++){
+        for(int i=0; i<=month; i++){
             orderMonth[i]=Integer.toString(i+1);
             for(int j=0; j<31; j++){
-                for(int k=0; k<24; k++){
-                    month_count+=Walkstaistic[i][j][k];
-                }
+                    month_count+=Walkstaistic[i][j][23];
             }
             barChart.addBar(new BarModel(orderMonth[i],month_count,0xFF56B7F2));
             month_count=0;
         }
         barChart.startAnimation();
     }
-    private int getAverage(int id){
-        calendar=Calendar.getInstance();
-        int month=calendar.get(Calendar.MONTH);
-        int day=calendar.get(Calendar.DATE);
-        int hour=calendar.get(Calendar.HOUR_OF_DAY);
-        int sum=0;
-        switch(id){
+    private int getAverage(int id) {
+        calendar = Calendar.getInstance();
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DATE);
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int sum = 0;
+        switch (id) {
             case 0://일별로 선택되었을때
-                if(day>=3) {
+                if (day >= 3) {
                     for (int i = 0; i < day - 2; i++) {
-                        sum+=Walkstaistic[month-1][i][23];
+                        sum += Walkstaistic[month - 1][i][23];
                     }
-                    int average=sum/(day-1);
-                    int gap=Walkstaistic[month-1][day-1][hour-1]-average;
+                    int average = sum / (day - 2);
+                    int gap = Walkstaistic[month][day - 1][hour - 1] - average;
                     return gap;
-                }
-                else if(day==2){
-                    return Walkstaistic[month-1][day-1][23]-Walkstaistic[month-1][day-1][hour-1];
-                }
-                else{
-                    return Walkstaistic[month-1][day-1][hour-1];
+                } else if (day == 2) {
+                    return Walkstaistic[month][0][23] - Walkstaistic[month][1][hour - 1];
+                } else {
+                    return Walkstaistic[month][0][hour - 1];
                 }
             case 1:
-                if(month>=3){
-                    for(int i=0; i<=month-2; i++){
-                        sum+=Walkstaistic[i][30][23];
+                if (month >= 3) {
+                    for (int i = 0; i <= month - 1; i++) {
+                        for (int j = 0; j < 31; j++) {
+                            sum += Walkstaistic[i][j][23];
+                        }
                     }
-                    int average=sum/(month-1);
-                    int gap=Walkstaistic[month-1][day-1][hour-1]-average;
+                    int average = sum / (month - 1);
+                    int thismonth = 0;
+                    for (int i = 0; i < day; i++) {
+                        thismonth += Walkstaistic[month][i][23];
+                    }
+                    int gap = thismonth - average;
+                    return gap;
+                } else if (month == 2) {
+                    int premonth = 0;
+                    int thismonth = 0;
+                    for (int i = 0; i < 31; i++) {
+                        premonth += Walkstaistic[0][i][23];
+                    }
+                    for (int i = 0; i < day; i++) {
+                        if (hour < 23 && i == day - 1) {
+                            thismonth += Walkstaistic[1][i][hour - 1];
+                            break;
+                        }
+                        thismonth += Walkstaistic[1][i][23];
+                    }
+                    return thismonth - premonth;
+                } else {
+                    int thismonth = 0;
+                    for (int i = 0; i < day; i++) {
+                        if (hour < 23 && i == day - 1) {
+                            thismonth += Walkstaistic[1][i][hour - 1];
+                            break;
+                        }
+                        thismonth += Walkstaistic[0][i][23];
+                        return thismonth;
+                    }
                 }
+
         }
         return 0;
     }
@@ -172,7 +209,7 @@ public class graph_activity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String serverURL = "http://192.168.62.94/query.php";//이부분을 쿼리문으로 바꿔주고 제이슨으로 받아오되 다르게 받아와야함
+            String serverURL = "http://192.168.0.60/query.php";//이부분을 쿼리문으로 바꿔주고 제이슨으로 받아오되 다르게 받아와야함
             String postParameters = "walk=" + params[0];
             try {
 
@@ -238,7 +275,6 @@ public class graph_activity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             mJsonString[0] = ls;
-            Log.e("tag",s);
             showResult();
         }
 
@@ -287,6 +323,14 @@ public class graph_activity extends AppCompatActivity {
                 for(int k=0; k<24; k++){
                     Walkstaistic[i][j][k]=k;
                 }
+                if(i==1){
+                    for(int k=28; k<31; k++) {
+                        Walkstaistic[1][k][23]=Walkstaistic[1][27][23];
+                    }
+                }
+                else if(i==3||i==5||i==8||i==10){
+                    Walkstaistic[i][30][23]=Walkstaistic[i][29][23];
+                }
             }
         }
         for(int i=0; i<list.size()-1; i++){
@@ -295,6 +339,25 @@ public class graph_activity extends AppCompatActivity {
             String hour=list.get(i).getDatetime().substring(8);
             Walkstaistic[Integer.parseInt(month)-1][Integer.parseInt(day)-1][Integer.parseInt(hour)-1]=Integer.parseInt(list.get(i).getWalk());
 
+        }
+    }
+
+    private void statisticWalk(){
+        Walkstaistic=new int[12][31][24];
+        Random random=new Random();
+        for(int i=0; i<12; i++){
+            for(int j=0; j<31; j++){
+                for(int k=0; k<24; k++){
+              //      Walkstaistic[i][j][k]=random.nextInt(2300);
+                }
+
+            }
+        }
+
+        for(int i=0; i<12; i++){
+            for(int j=0; j<31; j++){
+                    Walkstaistic[i][j][23]=random.nextInt(2300);
+            }
         }
     }
 }

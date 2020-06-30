@@ -79,9 +79,9 @@ public class GPSActivity extends AppCompatActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_gps);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         mActivity = this;
-        googleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this)
-                .addApi(LocationServices.API).build();
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
+            googleApiClient = new GoogleApiClient.Builder(this).addConnectionCallbacks(this)
+                    .addApi(LocationServices.API).build();
+            MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         intent=getIntent();
