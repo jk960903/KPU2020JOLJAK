@@ -112,7 +112,7 @@ public class graph_activity extends AppCompatActivity {
         int day_count=0;
         for(int i=0; i<day; i++){
             orderday[i]=Integer.toString(i+1);
-            day_count=Walkstaistic[month][i][23];
+            day_count=Walkstaistic[month][i][22];
             if(day==i-1&&hour<=23){
                 day_count=Walkstaistic[month][day-1][hour-1];
             }
@@ -128,8 +128,14 @@ public class graph_activity extends AppCompatActivity {
         int month_count=0;
         for(int i=0; i<=month; i++){
             orderMonth[i]=Integer.toString(i+1);
+            int max=0;
             for(int j=0; j<31; j++){
-                    month_count+=Walkstaistic[i][j][23];
+                    for(int k=0; k<23; k++){
+                        if(max<Walkstaistic[i][j][k]){
+                            max=Walkstaistic[i][j][k];
+                            month_count+=max;
+                        }
+                    }
             }
             barChart.addBar(new BarModel(orderMonth[i],month_count,0xFF56B7F2));
             month_count=0;
@@ -209,7 +215,7 @@ public class graph_activity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String serverURL = "http://192.168.0.60/query.php";//이부분을 쿼리문으로 바꿔주고 제이슨으로 받아오되 다르게 받아와야함
+            String serverURL = "http://192.168.62.36/query.php";//이부분을 쿼리문으로 바꿔주고 제이슨으로 받아오되 다르게 받아와야함
             String postParameters = "walk=" + params[0];
             try {
 
@@ -321,7 +327,7 @@ public class graph_activity extends AppCompatActivity {
         for(int i=0; i<12; i++){
             for(int j=0; j<31; j++){
                 for(int k=0; k<24; k++){
-                    Walkstaistic[i][j][k]=k;
+                    Walkstaistic[i][j][k]=0;
                 }
                 if(i==1){
                     for(int k=28; k<31; k++) {
@@ -334,9 +340,10 @@ public class graph_activity extends AppCompatActivity {
             }
         }
         for(int i=0; i<list.size()-1; i++){
-            String month=list.get(i).getDatetime().substring(5,6);
+            String month=list.get(i).getDatetime().substring(4,6);
             String day=list.get(i).getDatetime().substring(6,8);
             String hour=list.get(i).getDatetime().substring(8);
+            Log.e("tag",Integer.toString(i));
             Walkstaistic[Integer.parseInt(month)-1][Integer.parseInt(day)-1][Integer.parseInt(hour)-1]=Integer.parseInt(list.get(i).getWalk());
 
         }

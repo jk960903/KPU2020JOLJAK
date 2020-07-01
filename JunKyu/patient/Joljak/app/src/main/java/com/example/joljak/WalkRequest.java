@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WalkRequest extends StringRequest {
-    final static private String URL = "http://192.168.0.60/walk.php";//주소가 들어가야함
+    final static private String URL = "http://192.168.62.36/walk.php";//주소가 들어가야함
     private Map<String,String> parameter;
     public WalkRequest(String p_id,int walkcount,String day, Response.Listener<String> listener){
         super(Method.POST,URL,listener,null);

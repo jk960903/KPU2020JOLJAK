@@ -114,7 +114,8 @@ public class MainActivity extends AppCompatActivity {
         };
         LocateNet Locatetask=new LocateNet();
         Locatetask.execute(url,"2020년 5월 14일 18시");
-
+        getData getdata=new getData();
+        getdata.execute("80");
 
     }
     @Override
@@ -196,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override
         protected String doInBackground(String... params){
-            String serverURL="http://192.168.0.60/query.php";//이부분을 쿼리문으로 바꿔주고 제이슨으로 받아오되 다르게 받아와야함
+            String serverURL="http://192.168.62.36/query.php";//이부분을 쿼리문으로 바꿔주고 제이슨으로 받아오되 다르게 받아와야함
             String postParameters="walk="+params[1];
             try {
 
@@ -291,14 +292,11 @@ public class MainActivity extends AppCompatActivity {
 
                     List_Walk.add(personalData);
 
-                    Log.e("CHECKDATA",walk);
-                    Log.e("CHECKDATA",walk);
                 }
 
 
             } catch (JSONException e) {
 
-                Log.d("Error", "showResult : ", e);
                 e.printStackTrace();
             }
             statisticWalk(List_Walk);
@@ -313,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private class LocateNet extends AsyncTask<String,Void,String> {
-        String serverURL = "http://192.168.0.60/query_locate.php";
+        String serverURL = "http://192.168.62.36/query_locate.php";
 
 
         @Override
@@ -416,8 +414,6 @@ public class MainActivity extends AppCompatActivity {
 
 
             } catch (JSONException e) {
-
-                Log.d("Error", "showResult : ", e);
                 e.printStackTrace();
             }
 
@@ -425,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     private class HeartLate extends AsyncTask<String,Void,String>{
-        String serverURL = "http://192.168.0.60/query_locate.php";
+        String serverURL = "http://192.168.62.36/query_locate.php";
 
 
         @Override
@@ -453,7 +449,6 @@ public class MainActivity extends AppCompatActivity {
 
 
                 int responseStatusCode = httpURLConnection.getResponseCode();
-                Log.d("tag", "response code - " + responseStatusCode);
 
                 InputStream inputStream;
                 if (responseStatusCode == HttpURLConnection.HTTP_OK) {
@@ -516,6 +511,7 @@ public class MainActivity extends AppCompatActivity {
                     LocationData locationData = new LocationData();
 
                     locationData.setID(id);
+     //               locationData.setLongitude();
 
                     List_Locate.add(locationData);
                 }
@@ -532,12 +528,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private class getData extends AsyncTask<String,Void,String>{
-        String serverURL = "http://192.168.62.102/query_locate.php";
+        String serverURL = "http://192.168.62.36/query_demo.php";
 
 
         @Override
         protected String doInBackground(String... strings) {
-            String postParameters = "locate=" + strings[0];
+            String postParameters = "data1=" + strings[0];
             try {
 
                 URL url = new URL(serverURL);
@@ -599,32 +595,40 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            mJsonString[2] = s;
+            mJsonString[3] = s;
             showResult();
         }
 
         private void showResult() {
             String TAG_JSON = "root";
-            String TAG_ID = "p_id";
-            String TAG_LOCATE = "locate";
-            String TAG_DAY = "datetime";
+            String TAG_ID = "p_name";
+            String TAG_LOCATE = "p_address";
+            String TAG_DAY = "c_name";
+            String TAG_PHONE="c_phone";
             try {
-                JSONObject jsonObject = new JSONObject(mJsonString[2].substring(mJsonString[2].indexOf("{"), mJsonString[2].lastIndexOf("}") + 1));
+                JSONObject jsonObject = new JSONObject(mJsonString[3].substring(mJsonString[3].indexOf("{"), mJsonString[3].lastIndexOf("}") + 1));
                 JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
 
                 for (int i = 0; i < jsonArray.length(); i++) {
 
                     JSONObject item = jsonArray.getJSONObject(i);
 
-                    String id = item.getString(TAG_ID);
-                    String locate = item.getString(TAG_LOCATE);
-                    String day = item.getString(TAG_DAY);
+                    String name = item.getString(TAG_ID);
+                    String address = item.getString(TAG_LOCATE);
+                    String c_name = item.getString(TAG_DAY);
+                    String c_phone=item.getString(TAG_PHONE);
 
-                    LocationData locationData = new LocationData();
+                    Patientdata patientdata=new Patientdata();
+                    patientdata.setp_name(name);
+                    patientdata.setp_address(address);
+                    patientdata.setc_name(c_name);
+                    patientdata.setC_phone(c_phone);
 
-                    locationData.setID(id);
+                    TextView ptext=(TextView)findViewById(R.id.p_name);
+                    TextView ctext=(TextView)findViewById(R.id.c_name);
 
-                    List_Locate.add(locationData);
+                    ptext.setText(name);
+                    ctext.setText(c_name);
                 }
 
 

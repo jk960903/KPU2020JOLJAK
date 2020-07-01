@@ -8,14 +8,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HeartRequest extends StringRequest {
-    final static private String URL = "http://192.168.62.94/login.php";
+    final static private String URL = "http://192.168.62.36/heart.php";
     private Map<String, String> parameters;
     //생성자
-    public HeartRequest(String p_id, int heartrate, Response.Listener<String> listener) {
+    public HeartRequest(String p_name, String heartrate, Response.Listener<String> listener) {
         super(Method.POST, URL, listener, null);
         parameters = new HashMap<>();
-        parameters.put("p_id", p_id);
-        parameters.put("h_heart",Integer.toString(heartrate));
+        parameters.put("p_name", p_name);
+        parameters.put("p_heart",heartrate);
     }
 
 

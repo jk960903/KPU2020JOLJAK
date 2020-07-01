@@ -18,10 +18,10 @@
         android:background="@drawable/line">
 
         <TextView
-            android:id="@+id/temp"
+            android:id="@+id/c_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="신정희"
+            android:text=""
             android:textSize="35dp" />
 
         <TextView
@@ -46,7 +46,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="이영주"
+            android:text=""
+            android:id="@+id/p_name"
             android:textSize="25dp"/>
     </LinearLayout>
     <LinearLayout
@@ -63,7 +64,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/address"
-            android:text="경기도 시흥시 정왕동 1733-5"
             android:textSize="25dp"/>
     </LinearLayout>
     <LinearLayout

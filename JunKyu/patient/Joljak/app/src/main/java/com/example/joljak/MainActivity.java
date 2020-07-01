@@ -135,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if (!checkLocationServicesStatus()) {//위치 정보 승인 확인
             showDialogForLocationServiceSetting();//아니라면 승인 확인 다이얼로그 호출
         }
-        bt = new BluetoothSPP(this);//초기화
+        /*bt = new BluetoothSPP(this);//초기화
         if (!bt.isBluetoothAvailable()) {
             Log.i("bluetooth error", "에러");
             finish();
@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 Toast.makeText(getApplicationContext()
                         , "Unable to connect", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
         Button btnConnect = (Button) findViewById(R.id.connect);
         btnConnect.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -223,9 +223,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             Intent foreGroundService = GPSService.serviceintent;
 
         }
-
-        NetworkTask networkTask = new NetworkTask(url, null);
-        networkTask.execute();
+        getDrug getDrug=new getDrug();
+        getDrug.execute("80","80");
     }
 
     @Override
@@ -287,7 +286,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onStart() {
         super.onStart();
-        if (!bt.isBluetoothEnabled()) { //
+        /*if (!bt.isBluetoothEnabled()) { //
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, BluetoothState.REQUEST_ENABLE_BT);
         } else {
@@ -296,7 +295,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 bt.startService(BluetoothState.DEVICE_OTHER); //DEVICE_ANDROID는 안드로이드 기기 끼리
 
             }
-        }
+        }*/
     }
 
 
@@ -379,6 +378,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 break;*/
             case R.id.drugmenu:
                 intent = new Intent(MainActivity.this, DrugMenu.class);
+                intent.putExtra("json",mJsonString);
                 startActivity(intent);
                 break;
         }
@@ -535,21 +535,31 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public class BluetoothThread implements Runnable {
-
+        int time=0;
         @Override
         public void run() {
-            getDrug getDrug=new getDrug();
-            getDrug.execute("80");
+            getDrug getdrug=new getDrug();
+            getdrug.execute("80");
             while (true) {
                 Calendar calendar = Calendar.getInstance();
                 int hour = calendar.get(Calendar.HOUR_OF_DAY);
                 int min = calendar.get(Calendar.MINUTE);
                 for(int i=0; i<mlist.size(); i++){
-                    if(mlist.get(i).getm_time().equals(Integer.toString(hour)+":"+Integer.toString(min))){
+                    if(mlist.get(i).gethour()==hour){
                         bt.send("a",true);
+                        if(time<0);
+
                     }
                 }
-                //HeartSend();센서 고장으로 오류
+                //HeartSend();센서kk 고장으로 오류
+                bt.setOnDataReceivedListener(new BluetoothSPP.OnDataReceivedListener() {
+                    @Override
+                    public void onDataReceived(byte[] data, String message) {
+                        HeartSend(message);
+                        TextView textView =(TextView)findViewById(R.id.pulse);
+                        textView.setText(message);
+                    }
+                });
                 try {
                     Thread.sleep(5000);
                 } catch (InterruptedException e) {
@@ -558,10 +568,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         }
 
-        /*public void HeartSend() {
-            Calendar calendar = Calendar.getInstance();
-            String day = Integer.toString(calendar.get(Calendar.YEAR)) + "년 " + Integer.toString(calendar.get(Calendar.MONTH)) + "월 "
-                    + Integer.toString(calendar.get(Calendar.DAY_OF_MONTH)) + "일" + Integer.toString(calendar.get(Calendar.HOUR_OF_DAY)) + "시";
+        public void HeartSend(String Message) {
             Response.Listener<String> responseListener = new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
@@ -571,11 +578,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                         boolean success = jsonResponse.getBoolean("success");
 
                         if (success) {
-                            Log.i("json ok", "jsonOK");
-                            //String WalkView = jsonResponse.getString("walkView");
-                            //day = jsonResponse.getString("day");
                         } else {
-                            Log.i("fail", "failjson");
 
                         }
                     } catch (JSONException e) {
@@ -584,17 +587,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
             };
 
-            HeartRequest heartRequest = new WalkRequest(p_id, , day, responseListener);//heratrate 들어가야함
-
+            HeartRequest heartRequest = new HeartRequest(p_id,Message ,responseListener);//heratrate 들어가야함
             RequestQueue queue = Volley.newRequestQueue(MainActivity.this);
             queue.add(heartRequest);
         }
 
-    }*/
-
-
-
     }
+
+
+
+
     public class NetworkTask extends AsyncTask<Void, Void, String> {
 
         private String url;
@@ -623,12 +625,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             //tv_outPut.setText(s);
         }
     }
-
     private class getDrug extends AsyncTask<String,Void,String> {
-        String serverURL = "http://192.168.0.60/query_medicine.php";
+        String serverURL = "http://192.168.62.36/query_medicine.php";
         @Override
         protected String doInBackground(String... strings) {
-            String postParameters = "locate=" + strings[0];
+            String postParameters = "data3=" + strings[0];
             try {
                 URL url = new URL(serverURL);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -650,8 +651,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
                 int responseStatusCode = httpURLConnection.getResponseCode();
-                Log.d("tag", "response code - " + responseStatusCode);
-
                 InputStream inputStream;
                 if (responseStatusCode == HttpURLConnection.HTTP_OK) {
                     inputStream = httpURLConnection.getInputStream();
@@ -715,7 +714,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     medicineData.setID(id);
                     medicineData.setm_name(m_name);
                     medicineData.setm_time(m_time);
-
+                    if(m_time.length()<=4){
+                     medicineData.settime(Integer.parseInt(m_time.substring(0,1)));
+                    }
+                    else {
+                        medicineData.settime(Integer.parseInt(m_time.substring(0, 2)));
+                    }
                     mlist.add(medicineData);
 
                 }
@@ -725,8 +729,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                 e.printStackTrace();
             }
-
-
         }
     }
 }

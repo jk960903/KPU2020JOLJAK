@@ -8,10 +8,12 @@ import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -49,6 +51,7 @@ public class SetDrug extends AppCompatActivity {
                 intent.putExtra("drugtime",Hout);
                 intent.putExtra("drugmin",Minute);
                 setResult(3,intent);
+                DrugSend();
                 finish();
             }
         });
@@ -57,12 +60,13 @@ public class SetDrug extends AppCompatActivity {
 
     }
     private void DrugSend(){
-        final Response.Listener<String> responseListner=new Response.Listener<String>() {
+         Response.Listener<String> responseListner=new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try{
                     JSONObject jsonResponse=new JSONObject(response);
                 }catch(JSONException e){
+                    Log.e("tag","tag");
                     e.printStackTrace();
                 }
             }
@@ -71,6 +75,7 @@ public class SetDrug extends AppCompatActivity {
         DrugRequest drugRequest=new DrugRequest("setdrug",druggetname,stringtime,responseListner);
         RequestQueue queue= Volley.newRequestQueue(SetDrug.this);
         queue.add(drugRequest);
+        Toast.makeText(this.getApplicationContext(),"꺼져",Toast.LENGTH_LONG).show();
     }
 
 }

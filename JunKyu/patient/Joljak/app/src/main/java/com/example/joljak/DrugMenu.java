@@ -15,6 +15,7 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -25,37 +26,32 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class DrugMenu extends AppCompatActivity {
-    TextView[] textViews;
+    TextView textView;
     ArrayList<MedicineData> mlist;
     ListView listView;
     String mJsonString=null;
+    String json=mJsonString;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drug_menu);
         Intent intent=getIntent();
+        mJsonString=intent.getStringExtra("json");
         listView=(ListView) findViewById(R.id.druglist);
         mlist=new ArrayList<>();
         getDrug getdrug=new getDrug();
-        getdrug.execute("80");
-        String[] menu=new String[mlist.size()];
-        for(int i=0; i<menu.length; i++){
-            menu[i]="약 이름 : "+mlist.get(i).getm_name()+"복용 시간 : "+mlist.get(i).getm_time();
-        }
-        ArrayAdapter adapter=new ArrayAdapter(this,android.R.layout.activity_list_item,menu);
-        listView.setAdapter(adapter);
+        getdrug.execute("80","80");
+        textView=(TextView)findViewById(R.id.list);
     }
 
     private class getDrug extends AsyncTask<String,Void,String> {
-        String serverURL = "http://192.168.0.60/query_medicine.php";
+        String serverURL = "http://192.168.62.36/query_medicine.php";
         @Override
         protected String doInBackground(String... strings) {
-            String postParameters = "locate=" + strings[0];
+            String postParameters = "medicine=" + strings[0];
             try {
                 URL url = new URL(serverURL);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-
-
                 httpURLConnection.setReadTimeout(10000);
                 httpURLConnection.setConnectTimeout(10000);
                 httpURLConnection.setRequestMethod("POST");
@@ -63,8 +59,6 @@ public class DrugMenu extends AppCompatActivity {
                 httpURLConnection.setRequestProperty("Context_type", "application/x-www-form-urlencoded;charset=UTF-8");
                 httpURLConnection.setDoInput(true);
                 httpURLConnection.connect();
-
-
                 OutputStream outputStream = httpURLConnection.getOutputStream();
                 outputStream.write(postParameters.getBytes("UTF-8"));
                 outputStream.flush();
@@ -72,8 +66,6 @@ public class DrugMenu extends AppCompatActivity {
 
 
                 int responseStatusCode = httpURLConnection.getResponseCode();
-                Log.d("tag", "response code - " + responseStatusCode);
-
                 InputStream inputStream;
                 if (responseStatusCode == HttpURLConnection.HTTP_OK) {
                     inputStream = httpURLConnection.getInputStream();
@@ -112,6 +104,7 @@ public class DrugMenu extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             mJsonString = s;
+            Log.e("json",mJsonString);
             showResult();
         }
 
@@ -147,8 +140,17 @@ public class DrugMenu extends AppCompatActivity {
 
                 e.printStackTrace();
             }
-
-
+            setView();
         }
+    }
+    protected void setView(){
+        String[] menu=new String[mlist.size()];
+        for(int i=0; i<menu.length; i++){
+            menu[i]="약 이름 : "+mlist.get(i).getm_name()+"\t 복용 시간 : "+mlist.get(i).getm_time();
+        }
+        ArrayAdapter<String> adapter=new ArrayAdapter<>(this,android.R.layout.simple_list_item_1,menu);
+        listView=(ListView)findViewById(R.id.druglist);
+        listView.setAdapter(adapter);
+
     }
 }

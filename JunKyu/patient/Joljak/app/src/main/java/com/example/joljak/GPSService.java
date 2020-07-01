@@ -182,7 +182,7 @@ public class GPSService extends Service implements LocationListener ,SensorEvent
                 Address = getCurrentAddress(longitude, latitude);
                 Log.e("wackcount",Integer.toString(walkcount));
                 notification.setContentText("위치 :" + Address + "\n" + "걸은 수:" + WalkView);
-                if (minute % 5 == 0) {//여기 if문은 sleep으로 제어하는게 좋다고 생각됨
+                if (minute % 1 == 0) {//여기 if문은 sleep으로 제어하는게 좋다고 생각됨
                     //서버로 5분마다 데이터 보내는거 여기 하면됨
 
                     walkSend();//실험해보아야함
@@ -208,11 +208,24 @@ public class GPSService extends Service implements LocationListener ,SensorEvent
 
         public void walkSend() {
             Calendar calendar = Calendar.getInstance();
-            String day = Integer.toString(calendar.get(Calendar.YEAR))  + Integer.toString(calendar.get(Calendar.MONTH))
-                    + Integer.toString(calendar.get(Calendar.DATE)) +  Integer.toString(calendar.get(Calendar.HOUR_OF_DAY));
-            if(calendar.get(Calendar.MONTH)<=10){
-                 day = Integer.toString(calendar.get(Calendar.YEAR))  +"0"+ Integer.toString(calendar.get(Calendar.MONTH))
-                        + Integer.toString(calendar.get(Calendar.DATE)) +  Integer.toString(calendar.get(Calendar.HOUR_OF_DAY));
+            String day=Integer.toString(calendar.get(Calendar.YEAR));
+            if(calendar.get(Calendar.MONTH)+1<10){
+                day=day+"0"+Integer.toString(calendar.get(Calendar.MONTH)+1);
+            }
+            else{
+                day=day+Integer.toString(calendar.get(Calendar.MONTH)+1);
+            }
+            if(calendar.get(Calendar.DAY_OF_MONTH)<10){
+                day=day+"0"+Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
+            }
+            else{
+                day=day+Integer.toString(calendar.get(Calendar.DAY_OF_MONTH));
+            }
+            if(calendar.get(Calendar.HOUR_OF_DAY)<10){
+                day=day+"0"+Integer.toString(calendar.get(Calendar.HOUR_OF_DAY));
+            }
+            else{
+                day=day+Integer.toString(calendar.get(Calendar.HOUR_OF_DAY));
             }
             Response.Listener<String> responseListener = new Response.Listener<String>() {
                 @Override
@@ -234,20 +247,22 @@ public class GPSService extends Service implements LocationListener ,SensorEvent
 
 
         public void LocationSend() {
-           final Response.Listener<String> responseListner=new Response.Listener<String>() {
-               @Override
-               public void onResponse(String response) {
-                   try{
-                       JSONObject jsonResponse=new JSONObject(response);
-                   }catch(JSONException e){
-                       e.printStackTrace();
-                   }
-               }
-
-           };
-            LocationRequest locationRequest=new LocationRequest(p_id,longitude,latitude,responseListner);
+            Response.Listener<String> responseListener = new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        System.out.println(response);
+                        JSONObject jsonResponse = new JSONObject(response);
+                        boolean success = jsonResponse.getBoolean("success");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+            LocationRequest locationRequest=new LocationRequest("hello",longitude,latitude,responseListener);
             RequestQueue queue=Volley.newRequestQueue(GPSService.this);
             queue.add(locationRequest);
+            Log.e("check","위치전송안댐");
         }
 
     }
