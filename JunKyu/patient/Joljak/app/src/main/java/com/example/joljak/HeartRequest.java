@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HeartRequest extends StringRequest {
-    final static private String URL = "http://192.168.62.36/heart.php";
+    final static private String URL = "http://192.168.61.154/heart.php";
     private Map<String, String> parameters;
     //생성자
     public HeartRequest(String p_name, String heartrate, Response.Listener<String> listener) {

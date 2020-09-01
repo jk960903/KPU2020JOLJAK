@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class DrugRequest extends StringRequest {
 
-    final static private String url="http://192.168.62.36/setdrug.php";
+    final static private String url="http://192.168.61.154/setdrug.php";
     private Map<String,String> parameter;
     public DrugRequest(String p_name, String m_name, String m_time,Response.Listener<String> listener){
         super(Method.POST, url,listener,null);

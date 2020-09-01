@@ -40,15 +40,15 @@ public class DrugMenu extends AppCompatActivity {
         listView=(ListView) findViewById(R.id.druglist);
         mlist=new ArrayList<>();
         getDrug getdrug=new getDrug();
-        getdrug.execute("80","80");
+        getdrug.execute("80");
         textView=(TextView)findViewById(R.id.list);
     }
 
     private class getDrug extends AsyncTask<String,Void,String> {
-        String serverURL = "http://192.168.62.36/query_medicine.php";
+        String serverURL = "http://192.168.61.154/medicine_query1.php";
         @Override
         protected String doInBackground(String... strings) {
-            String postParameters = "medicine=" + strings[0];
+            String postParameters = "date3=" + strings[0];
             try {
                 URL url = new URL(serverURL);
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -103,7 +103,7 @@ public class DrugMenu extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            mJsonString = s;
+            //mJsonString = s;
             Log.e("json",mJsonString);
             showResult();
         }

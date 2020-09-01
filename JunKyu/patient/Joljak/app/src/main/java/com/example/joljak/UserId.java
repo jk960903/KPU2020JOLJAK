@@ -1,6 +1,6 @@
 package com.example.joljak;
 
-public class UserId {// ì‚¬ìš©ì ì¸í„°í˜ì´ìŠ¤ ì •ë³´ ++ ì¶”ê°€ í•„ìš”
+public class UserId {// »ç¿ëÀÚ ÀÎÅÍÆäÀÌ½º Á¤º¸ ++ Ãß°¡ ÇÊ¿ä
     String name;
     String Address;
     UserId(String name,String Address){

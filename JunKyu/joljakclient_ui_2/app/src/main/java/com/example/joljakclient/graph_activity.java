@@ -215,7 +215,7 @@ public class graph_activity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... params) {
-            String serverURL = "http://192.168.62.36/query.php";//이부분을 쿼리문으로 바꿔주고 제이슨으로 받아오되 다르게 받아와야함
+            String serverURL = "http://192.168.62.47/query.php";//이부분을 쿼리문으로 바꿔주고 제이슨으로 받아오되 다르게 받아와야함
             String postParameters = "walk=" + params[0];
             try {
 
@@ -340,8 +340,8 @@ public class graph_activity extends AppCompatActivity {
             }
         }
         for(int i=0; i<list.size()-1; i++){
-            String month=list.get(i).getDatetime().substring(4,6);
-            String day=list.get(i).getDatetime().substring(6,8);
+            String month=list.get(i).getDatetime().substring(4,5);
+            String day=list.get(i).getDatetime().substring(6,7);
             String hour=list.get(i).getDatetime().substring(8);
             Log.e("tag",Integer.toString(i));
             Walkstaistic[Integer.parseInt(month)-1][Integer.parseInt(day)-1][Integer.parseInt(hour)-1]=Integer.parseInt(list.get(i).getWalk());

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SetRequest extends StringRequest {
-    final static private String url="http://192.168.62.36/demo.php";
+    final static private String url="http://192.168.61.154/demo.php";
     private Map<String,String> parameter;
     public SetRequest(String p_name,String p_address,String c_name,String c_phone,Response.Listener<String> listener){
         super(Request.Method.POST, url,listener,null);

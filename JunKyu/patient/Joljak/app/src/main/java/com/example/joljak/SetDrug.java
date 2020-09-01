@@ -75,7 +75,6 @@ public class SetDrug extends AppCompatActivity {
         DrugRequest drugRequest=new DrugRequest("setdrug",druggetname,stringtime,responseListner);
         RequestQueue queue= Volley.newRequestQueue(SetDrug.this);
         queue.add(drugRequest);
-        Toast.makeText(this.getApplicationContext(),"꺼져",Toast.LENGTH_LONG).show();
     }
 
 }

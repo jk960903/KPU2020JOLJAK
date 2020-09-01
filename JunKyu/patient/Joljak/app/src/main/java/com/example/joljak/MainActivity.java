@@ -1,7 +1,9 @@
 package com.example.joljak;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
@@ -42,6 +44,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -118,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static ArrayList<MedicineData> mlist;
 
     // URL 설정.
-    static String url = "http://192.168.63.221/PHP_connection.php";
+    static String url = "http://192.168.61.154/PHP_connection.php";
     static boolean logincheck;
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
         @Override
@@ -132,10 +136,26 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        View actionbarView;
+        ImageButton menu_btn;
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar =getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setHomeButtonEnabled(false);
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setDisplayHomeAsUpEnabled(false);
+        actionBar.setDisplayShowCustomEnabled(false);
+
+        ActionBar.LayoutParams layout = new ActionBar.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        actionbarView = getLayoutInflater().inflate(R.layout.toolbar, null);
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setCustomView(actionbarView, layout);
         if (!checkLocationServicesStatus()) {//위치 정보 승인 확인
             showDialogForLocationServiceSetting();//아니라면 승인 확인 다이얼로그 호출
         }
-        /*bt = new BluetoothSPP(this);//초기화
+        bt = new BluetoothSPP(this);//초기화
         if (!bt.isBluetoothAvailable()) {
             Log.i("bluetooth error", "에러");
             finish();
@@ -165,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 Toast.makeText(getApplicationContext()
                         , "Unable to connect", Toast.LENGTH_SHORT).show();
             }
-        });*/
+        });
         Button btnConnect = (Button) findViewById(R.id.connect);
         btnConnect.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -224,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         }
         getDrug getDrug=new getDrug();
-        getDrug.execute("80","80");
+        getDrug.execute("80");
     }
 
     @Override
@@ -286,7 +306,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onStart() {
         super.onStart();
-        /*if (!bt.isBluetoothEnabled()) { //
+        if (!bt.isBluetoothEnabled()) { //
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent, BluetoothState.REQUEST_ENABLE_BT);
         } else {
@@ -295,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 bt.startService(BluetoothState.DEVICE_OTHER); //DEVICE_ANDROID는 안드로이드 기기 끼리
 
             }
-        }*/
+        }
     }
 
 
@@ -626,7 +646,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
     private class getDrug extends AsyncTask<String,Void,String> {
-        String serverURL = "http://192.168.62.36/query_medicine.php";
+        String serverURL = "http://192.168.61.154/medicine_query1.php";
         @Override
         protected String doInBackground(String... strings) {
             String postParameters = "data3=" + strings[0];
