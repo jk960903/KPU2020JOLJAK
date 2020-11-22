@@ -1,6 +1,6 @@
 package com.example.joljakclient;
 
-public class WalkData {
+public class WalkData {//걸음수 정보 클래스
     private String p_id;
     private String walk;
     private String datetime;

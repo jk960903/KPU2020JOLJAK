@@ -45,7 +45,7 @@ import java.util.Locale;
 
 import static java.util.Calendar.MINUTE;
 
-public class GPSService extends Service implements LocationListener ,SensorEventListener {
+public class GPSService extends Service implements LocationListener ,SensorEventListener {//GPS센서값이 변동되었을 때 클래스 실시간으로 GPS 값 읽어오고 그 값을 서버로 전송 및 FOREGROUND 서비스로 대부분의 실시간 전송을 이곳에서 전송
     public static Intent serviceintent = null;
     GPSTracker gpsTracker;
     private String WalkView;

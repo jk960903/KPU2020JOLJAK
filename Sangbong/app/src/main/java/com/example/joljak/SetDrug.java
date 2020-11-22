@@ -26,7 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Calendar;
-
+//복약 설정 액티비티
 public class SetDrug extends AppCompatActivity {
     int Hout,Minute=0;
     Button timeOK;

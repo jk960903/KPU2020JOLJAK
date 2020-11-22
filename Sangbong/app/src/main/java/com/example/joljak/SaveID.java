@@ -16,8 +16,8 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-public class SaveID extends AppCompatActivity {// -> 인터페이스 조정 필요 액티비티상으로 건드릴지 아니면 서버에서 가져와서 컨트롤 할지에 대한 컨트롤 필요
+//사용자 정보 저장 액티비티
+public class SaveID extends AppCompatActivity {
 
     private EditText UserId, UserAddress, CareId, CarePhone;
     private Button Send, Cancel;

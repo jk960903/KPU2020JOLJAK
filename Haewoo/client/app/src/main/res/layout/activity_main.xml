@@ -31,7 +31,7 @@
             android:id="@+id/c_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
+            android:text="신정희"
             android:fontFamily="@font/nanum"
             android:textSize="35dp" />
 
@@ -59,7 +59,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
+            android:text="이영주"
             android:id="@+id/p_name"
             android:fontFamily="@font/nanum"
             android:textSize="25dp"/>
@@ -80,7 +80,9 @@
             android:layout_height="wrap_content"
             android:id="@+id/address"
             android:fontFamily="@font/nanum"
+            android:text="경기도 시흥시 정왕본동"
             android:textSize="25dp"/>
+
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

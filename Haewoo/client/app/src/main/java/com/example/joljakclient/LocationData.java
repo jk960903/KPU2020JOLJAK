@@ -1,6 +1,6 @@
 package com.example.joljakclient;
 
-public class LocationData {
+public class LocationData {//위치 데이터 클래스
     private String p_id;
     private String longitude;
     private String latitude;

@@ -62,7 +62,7 @@ public class GPSActivity extends AppCompatActivity implements OnMapReadyCallback
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
-    // 여기액티비티는 블루투스 연계하고 블루투스에 대한 데이터값 핸들링 해야함;;
+    //HAEWOO와 동일
 
     private GoogleApiClient googleApiClient = null;
     private GoogleMap googleMap = null;

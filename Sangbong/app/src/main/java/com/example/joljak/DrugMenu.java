@@ -28,7 +28,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
-public class DrugMenu extends AppCompatActivity {
+public class DrugMenu extends AppCompatActivity {//복용약 보이는 액티비티
     TextView textView;
     ArrayList<MedicineData> mlist;
     ListView listView;
@@ -65,7 +65,7 @@ public class DrugMenu extends AppCompatActivity {
         textView=(TextView)findViewById(R.id.list);
     }
 
-    private class getDrug extends AsyncTask<String,Void,String> {
+    private class getDrug extends AsyncTask<String,Void,String> {//복용약 정보 가져오기
         String serverURL = "http://192.168.62.120/query_medicine.php";
         @Override
         protected String doInBackground(String... strings) {
@@ -162,7 +162,7 @@ public class DrugMenu extends AppCompatActivity {
             setView();
         }
     }
-    protected void setView(){
+    protected void setView(){//리스트 뷰 세팅
         String[] menu=new String[mlist.size()];
         for(int i=0; i<menu.length; i++){
             menu[i]="약 이름 : "+mlist.get(i).getm_name()+"복용 시간 : "+mlist.get(i).getm_time();

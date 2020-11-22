@@ -57,21 +57,21 @@ import java.util.List;
 import java.util.Locale;
 public class GPSActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         LocationListener {
-    private GoogleApiClient googleApiClient = null;
-    private static GoogleMap googleMap = null;
-    private Marker currentparker = null;
-    private static final String TAG = "googlemap_example";
-    private AppCompatActivity mActivity;
-    private static final int GPS_ENABLE_REQUEST_CODE = 2001;
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2002;
-    private static final int UPDATE_INTERVAL_MS = 1000;  // 1초
+    private GoogleApiClient googleApiClient = null; //구글 api 클라이언트
+    private static GoogleMap googleMap = null; // 구글 맵 변수
+    private Marker currentparker = null; //현재 맵에 표시할 마커
+    private static final String TAG = "googlemap_example"; //태그
+    private AppCompatActivity mActivity; //액티비티
+    private static final int GPS_ENABLE_REQUEST_CODE = 2001; //GPS가 가능한지 확인해주는 코드
+    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2002; // GPS 접근 확인 퍼미션
+    private static final int UPDATE_INTERVAL_MS = 1000;  // 업데이트 주기 1
     private static final int FASTEST_UPDATE_INTERVAL_MS = 500; // 0.5초
     boolean askPermissionOnceAgain = false;
     boolean mRequestingLocationUpdates = false;
-    Location mCurrentLocation;
+    Location mCurrentLocation; //로케이션 변수
     boolean mMoveMapByUser = true;
     boolean mMoveMapByAPI = true;
-    LatLng currentPositon;
+    LatLng currentPositon; //현재 위치 LatLng 클래스
     private ImageButton menu;
     public static String defaultUrl = "https://maps.googleapis.com/maps/api/geocode/json?address=";
     Handler handler = new Handler();
@@ -114,7 +114,7 @@ public class GPSActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onMapReady(final GoogleMap map) {
+    public void onMapReady(final GoogleMap map) {//지도 준비 메서드
         googleMap = map;
         //런타임 퍼미션 요청 or 활성 요청 대화상자 보이기전 초기위치로 이동
         setDefaultLocation();
@@ -152,7 +152,7 @@ public class GPSActivity extends AppCompatActivity implements OnMapReadyCallback
 
     }
 
-    private void startLocationUpdates() {
+    private void startLocationUpdates() { // 로케이션 업데이트 메서드
         if (!checkLocationServicesStatus()) {
             showDialogForLocationServiceSetting();
         } else {
@@ -173,9 +173,9 @@ public class GPSActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onConnected(Bundle bunle) {
+    public void onConnected(Bundle bunle) { // 연결되었을 때 실행되는 메서드
         if (mRequestingLocationUpdates == false) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { //SDK 버전확인
                 int hasFineLocationPermission = ContextCompat.checkSelfPermission(this,
                         Manifest.permission.ACCESS_FINE_LOCATION);
                 if (hasFineLocationPermission == PackageManager.PERMISSION_DENIED) {
@@ -194,7 +194,7 @@ public class GPSActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onConnectionSuspended(int cause) {
+    public void onConnectionSuspended(int cause) { //연결 거부 네트워크 및 API 문제 발생시 처리해야할 것들 Interface 구조라 필수 작성
         //연결 거절
         if (cause == CAUSE_NETWORK_LOST) {
             //네트워크 연결 안됨
@@ -204,13 +204,13 @@ public class GPSActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(ConnectionResult connectionResult) { // 연결 실패하였을때 지도 위치를 초기 설정해주는 것 네트워크 연결안되었을 때 주로 발생
         //연결 실패
         setDefaultLocation();//디폴트 위치로 설정
     }
 
     @Override
-    public void onLocationChanged(Location location) {
+    public void onLocationChanged(Location location) { // 현재 위치가 업데이트 되었을 때 표시하는 위치 반환 함수
         currentPositon = new LatLng(location.getLatitude(), location.getLongitude());//위도와 경도 얻어옴 여기서 서버로부터 받아오는 것 수행
         String markerTitle = getCurrentAddress(currentPositon);
         String markserSnippet = "위도:" + String.valueOf(location.getLatitude()) + "경도 :" + String.valueOf(location.getLongitude());
@@ -277,7 +277,7 @@ public class GPSActivity extends AppCompatActivity implements OnMapReadyCallback
         }
 
     }
-    public void setDefaultLocation() {
+    public void setDefaultLocation() { // 연결이 되지않았을 때 지도 표시 초기화 메서드
         mMoveMapByUser = true;//사용자가 이동 불가
         LatLng DEFAULT_LOCATION = new LatLng(Latitude,Longitude);//위치 서울로 설정(GPS  안켜져있거나 인터넷 연결이 안되 구글 api를 가져올수 없음)
         String marketTitle = getCurrentAddress(Latitude,Longitude);
@@ -294,7 +294,7 @@ public class GPSActivity extends AppCompatActivity implements OnMapReadyCallback
         googleMap.moveCamera(cameraUpdate);
     }
     @TargetApi(Build.VERSION_CODES.M)
-    private void checkPermission() {
+    private void checkPermission() {//사용자가 필수 퍼미션을 가졌는지 확인하는 메서드
         boolean fineLocationRationale = ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION);
         int hasFineLocationPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
         if (hasFineLocationPermission == PackageManager.PERMISSION_DENIED && fineLocationRationale)
@@ -310,7 +310,7 @@ public class GPSActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
     @Override
-    public void onRequestPermissionsResult(int permsRequestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int permsRequestCode, @NonNull String[] permissions, @NonNull int[] grantResults) { // 퍼미션 요청 승인 메서드
         if (permsRequestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION && grantResults.length > 0) {
             boolean permissionAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
 
@@ -326,7 +326,7 @@ public class GPSActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     @TargetApi(Build.VERSION_CODES.M)
-    private void showDialogForPermission(String msg) {
+    private void showDialogForPermission(String msg) { //퍼미션 승인 다이얼로그 창
         AlertDialog.Builder builder = new AlertDialog.Builder(GPSActivity.this);
         builder.setTitle("알림");
         builder.setMessage(msg);
@@ -341,7 +341,7 @@ public class GPSActivity extends AppCompatActivity implements OnMapReadyCallback
         builder.create().show();
     }
 
-    private void showDialogForPermissionSettings(String msg) {
+    private void showDialogForPermissionSettings(String msg) {//퍼미션 다이얼로그 창 세팅
         AlertDialog.Builder builder = new AlertDialog.Builder(GPSActivity.this);
         builder.setTitle("알림");
         builder.setMessage(msg);
@@ -364,7 +364,7 @@ public class GPSActivity extends AppCompatActivity implements OnMapReadyCallback
         });
         builder.create().show();
     }
-    private void showDialogForLocationServiceSetting() {
+    private void showDialogForLocationServiceSetting() {//위치 정보 승인 퍼미션 다이얼로그 메서드
         AlertDialog.Builder builder = new AlertDialog.Builder(GPSActivity.this);
         builder.setTitle("위치 서비스 비활성화");
         builder.setMessage("앱을 사용하기 위해서는 위치서비스 필요합니다.\n" + "위치 설정을 수정하실건가요?");

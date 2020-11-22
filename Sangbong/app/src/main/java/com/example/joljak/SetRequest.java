@@ -8,7 +8,7 @@ import com.android.volley.toolbox.StringRequest;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-
+//환자 정보 리퀘스트 클래스
 public class SetRequest extends StringRequest {
     final static private String url="http://192.168.62.120/setdata.php";
     private Map<String,String> parameter;

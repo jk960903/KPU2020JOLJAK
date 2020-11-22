@@ -7,7 +7,7 @@ import com.android.volley.toolbox.StringRequest;
 
 import java.util.HashMap;
 import java.util.Map;
-
+//회원가입 요청 리퀘스트로 데모버전 사용 X
 public class RegisterRequest extends StringRequest {
     final static private String URL = "http://192.168.62.120/register.php";
     private Map<String, String> parameters;

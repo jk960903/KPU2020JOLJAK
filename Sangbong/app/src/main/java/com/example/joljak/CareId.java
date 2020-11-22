@@ -1,6 +1,6 @@
 package com.example.joljak;
 
-public class CareId {//보호자 인터페이스 정보+추가 필요
+public class CareId {//보호자 클래스
     public String CareId;
     public String Phone;
     CareId(String careId,String phone){

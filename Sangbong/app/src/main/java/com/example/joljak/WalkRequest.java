@@ -8,7 +8,7 @@ import com.android.volley.toolbox.StringRequest;
 
 import java.util.HashMap;
 import java.util.Map;
-
+//걸음정보 전송리퀘스트 클래스 
 public class WalkRequest extends StringRequest {
     final static private String URL = "http://192.168.62.120/walk.php";//주소가 들어가야함
     private Map<String,String> parameter;

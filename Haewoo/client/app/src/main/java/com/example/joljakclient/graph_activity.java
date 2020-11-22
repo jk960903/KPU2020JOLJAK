@@ -29,7 +29,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
-
+// 환자 상태의 추이를 그래프화 하는 메서드
 public class graph_activity extends AppCompatActivity {
 
     private BarChart graph_barChart;
@@ -90,12 +90,12 @@ public class graph_activity extends AppCompatActivity {
             }
         });
     }
-    private void network(){
+    private void network(){// 환자의 평균 기록 가져오기
         getWalk networkTask=new getWalk();
         networkTask.onPostExecute(ls);
      //   statisticWalk();
     }
-    private void initData(){
+    private void initData(){//그래프 초기화
         List_Walk=new ArrayList<>();
         calendar=Calendar.getInstance();
         hour=calendar.get(Calendar.HOUR_OF_DAY);
@@ -110,7 +110,7 @@ public class graph_activity extends AppCompatActivity {
         Intent intent=getIntent();
         ls=intent.getStringExtra("json");
     }
-    private void initBar(BarChart barChart) {
+    private void initBar(BarChart barChart) {//그래프 바 초기화
         barChart = (BarChart) findViewById(R.id.graph);
         barChart.clearChart();
         String[] hour;
@@ -125,7 +125,7 @@ public class graph_activity extends AppCompatActivity {
         }
         barChart.startAnimation();
     }
-    private void makeBartoDay(BarChart barChart){
+    private void makeBartoDay(BarChart barChart){//매 달의 일마다 그래프 변경
         barChart=(BarChart)findViewById(R.id.graph);
         barChart.clearChart();
         String[] orderday;
@@ -141,7 +141,7 @@ public class graph_activity extends AppCompatActivity {
         }
         barChart.startAnimation();
     }
-    private void makeBartoMonth(BarChart barChart){
+    private void makeBartoMonth(BarChart barChart){//매 달 평균 추이 그래프 보여주기
         barChart=(BarChart)findViewById(R.id.graph);
         barChart.clearChart();
         String[] orderMonth;
@@ -163,7 +163,7 @@ public class graph_activity extends AppCompatActivity {
         }
         barChart.startAnimation();
     }
-    private int getAverage(int id) {
+    private int getAverage(int id) {//걸음수 평균량 구하기
         calendar = Calendar.getInstance();
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DATE);
@@ -226,17 +226,15 @@ public class graph_activity extends AppCompatActivity {
         }
         return 0;
     }
-    protected class getWalk extends AsyncTask<String, Void, String> {
+    protected class getWalk extends AsyncTask<String, Void, String> {//걸음 수 데이터 가져오기 클래스
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-
-
         }
 
         @Override
         protected String doInBackground(String... params) {
-            String serverURL = "http://192.168.62.120/query.php";//이부분을 쿼리문으로 바꿔주고 제이슨으로 받아오되 다르게 받아와야함
+            String serverURL = "http://192.168.62.120/query.php";//서버 연결
             String postParameters = "walk=" + params[0];
             try {
 
@@ -304,7 +302,7 @@ public class graph_activity extends AppCompatActivity {
             showResult();
         }
 
-        private void showResult() {
+        private void showResult() { // 받아온 것 정리  JSONObject 사용
             String TAG_JSON = "root";
             String TAG_ID = "p_id";
             String TAG_WALK = "walk";
@@ -342,7 +340,7 @@ public class graph_activity extends AppCompatActivity {
             statisticWalk(List_Walk);
         }
     }
-    private void statisticWalk(ArrayList<WalkData> list){
+    private void statisticWalk(ArrayList<WalkData> list){//걸음수 통계 메서드
         Walkstaistic=new int[12][31][24];
         for(int i=0; i<12; i++){
             for(int j=0; j<31; j++){

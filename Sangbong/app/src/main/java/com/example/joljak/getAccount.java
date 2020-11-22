@@ -18,8 +18,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
-//회원가입 아직 미완성
-public class getAccount extends AppCompatActivity {
+public class getAccount extends AppCompatActivity {//회원가입부 데모버전에서 미사용
 
     private AlertDialog dialog;
     private boolean validate = false;

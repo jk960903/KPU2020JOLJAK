@@ -8,7 +8,7 @@ import com.android.volley.toolbox.StringRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DrugRequest extends StringRequest {
+public class DrugRequest extends StringRequest {//복용약 정보 전송 클래스
 
     final static private String url="http://192.168.62.120/setdrug.php";
     private Map<String,String> parameter;

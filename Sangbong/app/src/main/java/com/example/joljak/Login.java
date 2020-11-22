@@ -1,5 +1,5 @@
 package com.example.joljak;
-
+//로그인 정보로 데모버전에서는 사용하지 않음
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;

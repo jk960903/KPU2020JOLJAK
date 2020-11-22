@@ -46,11 +46,6 @@ import java.util.List;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-    //보호자 어플 마찬가지로 사용자와 똑같이 GPS + 사용자 정보+현재 상태(보행수,심박수) 필요->여기에 대한 뒷받침이 논문필요
-    //서버 연결필요
-    //유저와 마찬가지로 클라이언트도 유저와 같은 상황이 필요하지만 중간에 서버가 들어감
-    //유저는 유저 어플->서버->클라이언트 어플 이지만
-    //클라이언트 어플은 상호작용이 필요가 없음 오직 수신만 필요하다라고 생각
     private boolean CheckLogin;
     String sfName="ClientLogin";
     final static int ACT_SUB=1;
@@ -161,13 +156,13 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
     }
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu){//메뉴 옵션 리플레이터
         MenuInflater inflater=getMenuInflater();
         inflater.inflate(R.menu.mainmenu,menu);
         return true;
     }
     @Override
-    public boolean onOptionsItemSelected(MenuItem item){
+    public boolean onOptionsItemSelected(MenuItem item){//메뉴이동
         Intent intent=null;
         switch (item.getItemId()){
             case R.id.GPS:
@@ -186,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     @Override
-    protected void onActivityResult(int requestcode,int resultcode,Intent data){
+    protected void onActivityResult(int requestcode,int resultcode,Intent data){//액티비티 리설트로 데모버전에서는 로그인 없으므로 사용하지 않음
         super.onActivityResult(requestcode,resultcode,data);
         switch (requestcode){
             case LOGIN_OK://로그인이 되어있다면
@@ -228,7 +223,7 @@ public class MainActivity extends AppCompatActivity {
         }
         @Override
         protected String doInBackground(String... params){
-            String serverURL="http://192.168.62.120/query.php";//이부분을 쿼리문으로 바꿔주고 제이슨으로 받아오되 다르게 받아와야함
+            String serverURL="http://192.168.62.120/query.php";
             String postParameters="walk="+params[1];
             try {
 
@@ -341,7 +336,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    private class LocateNet extends AsyncTask<String,Void,String> {
+    private class LocateNet extends AsyncTask<String,Void,String> {//위치정보 받아오기
         String serverURL = "http://192.168.62.120/query_locate.php";
 
 
@@ -451,7 +446,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
     }
-    private class HeartLate extends AsyncTask<String,Void,String>{
+    private class HeartLate extends AsyncTask<String,Void,String>{//심박 받아오기
         String serverURL = "http://192.168.62.120/query_heart.php";
 
 
@@ -557,7 +552,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private class getData extends AsyncTask<String,Void,String>{
+    private class getData extends AsyncTask<String,Void,String>{//걸음수 받아오기
         String serverURL = "http://192.168.62.120/query_demo.php";
 
 

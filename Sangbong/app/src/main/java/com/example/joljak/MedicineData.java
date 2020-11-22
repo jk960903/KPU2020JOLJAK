@@ -1,5 +1,5 @@
 package com.example.joljak;
-
+//복약정보 클래스
 public class MedicineData {
     private String p_id;
     private String m_name;

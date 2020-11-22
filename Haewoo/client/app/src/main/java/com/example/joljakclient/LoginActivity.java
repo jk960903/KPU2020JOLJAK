@@ -21,7 +21,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.lang.String;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {//로그인 클래스 데모 버전에서는 사용하지 않음
     //로그인 페이지
     //DB연동 안하면 작동 불가 INSTANCE 연결 필요
     EditText LoginID,LoginPassword;

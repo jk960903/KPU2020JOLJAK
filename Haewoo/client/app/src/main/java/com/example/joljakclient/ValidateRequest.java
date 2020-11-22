@@ -8,7 +8,7 @@ import com.android.volley.toolbox.StringRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ValidateRequest extends StringRequest {
+public class ValidateRequest extends StringRequest {//회원가입 유효성 확인 클래스 데모버전 사용 x
     final static private String URL = "http://192.168.62.120/uservalidate.php";
     private Map<String, String> parameters;
 

@@ -1,6 +1,6 @@
 package com.example.joljakclient;
 
-public class Patientdata {
+public class Patientdata {//환자 정보 데이터 클래스
         private String p_name;
         private String p_address;
         private String c_name;

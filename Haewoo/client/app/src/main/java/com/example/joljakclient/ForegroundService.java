@@ -77,7 +77,7 @@ public class ForegroundService extends Service {
         @Override
         public void run(){
             int predate=Calendar.getInstance().get(Calendar.DATE);
-            while(true){
+            while(true){//시간설정 부 꺼지지 않게 하기 위해 while True 사용
                 calendar=Calendar.getInstance();
                 int year = calendar.get(Calendar.YEAR);
                 int month = calendar.get(Calendar.MONTH);

@@ -1,6 +1,6 @@
 package com.example.joljakclient;
 
-public class HeartData {
+public class HeartData {//심장 박동 클래스
     String p_name;
     int p_heart;
     public String getName(){

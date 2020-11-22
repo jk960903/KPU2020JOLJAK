@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
-
+//심박수 보이는 액티비티 -> 메인으로 흡수되어 코드만 남아있음
 public class simbakActivity extends AppCompatActivity {
     TextView Beat;
     @Override

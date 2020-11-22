@@ -10,7 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
-
+//회원가입 클래스로 데모버전 사용 X
 public class RequestHttpURLConnection {
     public String request(String _url, ContentValues _params){
 

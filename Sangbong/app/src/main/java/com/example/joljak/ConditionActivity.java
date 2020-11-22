@@ -22,7 +22,6 @@ import java.util.GregorianCalendar;
 
 import static com.example.joljak.MainActivity.ACT_COMPLETE;
 import static com.example.joljak.MainActivity.ACT_SUB;
-//이 액티비티는 없어도 될거같기도 하고..... Becuase 이미 전에서 하고 있음 or 여기에 환자의 추이를 보여주는 것도 나쁘진 않다고 생각
 public class ConditionActivity extends AppCompatActivity implements SensorEventListener {
     //걸음수 측정 아직 세이브 인스턴스나 이런것들이 안되서 그런거 같기도 함
     private SensorManager sensorManager;

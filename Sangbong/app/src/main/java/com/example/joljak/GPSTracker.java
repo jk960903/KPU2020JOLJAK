@@ -16,7 +16,7 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.maps.model.LatLng;
 
-public class GPSTracker extends Service implements LocationListener {
+public class GPSTracker extends Service implements LocationListener {//GSP관련 메서드
     private final Context context;
     Location location;
     double latitude;//위도

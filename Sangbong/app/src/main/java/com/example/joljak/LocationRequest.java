@@ -7,7 +7,7 @@ import com.android.volley.toolbox.StringRequest;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LocationRequest extends StringRequest {
+public class LocationRequest extends StringRequest {//위치정보 전송 리퀘스트 클래스
     final static private String URL = "http://192.168.62.120/location.php";
     private Map<String, String> parameters;
     //생성자
